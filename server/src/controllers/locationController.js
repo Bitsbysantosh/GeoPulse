@@ -1,5 +1,6 @@
 const Location = require('../models/Location');
 const locationController = async(req, res) => {
+    const locations = await Location.find();
     const { latitude, longitude } = req.body;
 
     console.log(latitude);
@@ -19,4 +20,12 @@ const locationController = async(req, res) => {
     });
 };
 
-module.exports = locationController;
+const getLocations = async(req, res) => {
+    const locations = await Location.find();
+    res.json(locations);
+};
+
+module.exports = {
+    locationController,
+    getLocations,
+};
