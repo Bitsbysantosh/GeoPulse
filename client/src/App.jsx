@@ -1,6 +1,6 @@
 import {MapContainer, TileLayer, 
 Marker, Popup, useMap } from 'react-leaflet';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 function LocationMarker({ location }) {
   const map = useMap();
   if (!location) {
@@ -19,6 +19,7 @@ function LocationMarker({ location }) {
 
 function App() {
   const [location, setLocation] = useState(null);
+  const [locations, setLocations] = useState([]);
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -39,6 +40,16 @@ function App() {
     );
   };
 
+   useEffect(() => {
+    fetch("http://localhost:5000/api/location")
+      .then((response) => response.json())
+      .then((data) => {
+        setLocations(data);
+      });
+    }, []);
+  
+
+
     return (
     <div>
       <h1>GeoPulse</h1>
@@ -51,6 +62,16 @@ function App() {
       />
 
       <LocationMarker location={location} />
+      {locations.map((item) => (
+        <Marker
+          key={item._id}
+          position={[item.latitude, item.longitude]}
+        >
+          <Popup>
+           saved Location
+          </Popup>
+        </Marker>
+      ))}
     </MapContainer>
     </div>
   );
