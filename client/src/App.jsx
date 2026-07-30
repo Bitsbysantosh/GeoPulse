@@ -24,9 +24,21 @@ function App() {
       (position) => {
         console.log(position);
         setLocation(position.coords);
-      }
+
+        fetch("http://localhost:5000/api/location", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }),
+        });
+      } 
     );
-    };
+  };
+
     return (
     <div>
       <h1>GeoPulse</h1>
